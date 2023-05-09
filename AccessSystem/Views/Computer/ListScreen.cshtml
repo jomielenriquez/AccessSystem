@@ -31,7 +31,7 @@
                     <td><a href="@Url.Action("EditScreen","Computer", new { computerID = (computers.COMPUTERID)})">@computers.COMPUTERNUMBER</a></td>
                     <td>@computers.SPECIFICATION</td>
                     <td>@(computers.ISACTIVE? Html.Raw("<span class=\"badge bg-success\">Active</span>"): Html.Raw("<span class=\"badge bg-danger\">Inactive</span>")) </td>
-                    <td class="hidden">@computers.COMPUTERNUMBER</td>
+                    <td class="hidden">@computers.COMPUTERID</td>
                 </tr>
             }
         </tbody>

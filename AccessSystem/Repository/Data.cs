@@ -192,11 +192,11 @@ namespace AccessSystem.Repository
             string strCommand = "DELETE " + tableName + " ";
 
             strCommand += " Where " + toDeleteColumn + " in ('" + String.Join("','", toDeleteItems) + "') ";
-            if (Properties.ToArray().Any())
-            {
-                strCommand += "and ";
-                strCommand += string.Join(" and ", Properties.Select(x => x + "=@" + x));
-            }
+            //if (Properties.ToArray().Any())
+            //{
+            //    strCommand += "and ";
+            //    strCommand += string.Join(" and ", Properties.Select(x => x + "=@" + x));
+            //}
 
             try
             {

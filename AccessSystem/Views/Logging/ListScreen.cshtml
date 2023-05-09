@@ -1,0 +1,70 @@
+﻿@model AccessSystem.Model.AdminModel
+@{
+    ViewBag.Title = "Logs List Screen";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@*<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>*@
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+@using (Html.BeginForm("Delete", "Logging", FormMethod.Post, new { @name = "LogForm" }))
+{
+    <legend>Logs List Screen</legend>
+    <p class="bs-component">
+        <a class="btn btn-primary" href="@Url.Action("EditScreen","Log")"><i class="icon-plus"></i>  Add</a>
+        <button type="submit" class="btn btn-danger"><i class="icon-trash"></i>  Delete</button>
+    </p>
+    <table id="LogTable" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th style="width: 25px;">
+                    @*<input type="checkbox" id="AreChecked" />*@
+                </th>
+                <th>Full Name</th>
+                <th>Course, Year and Section</th>
+                <th>Computer Number</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th class="hidden">ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AccessSystem.Model.TBL_LOG log in Model.LogList)
+            {
+                <tr>
+                    <td><input type="checkbox" name="AreChecked" value="@log.LOGID" /></td>
+                    <td><a href="@Url.Action("EditScreen","Logging", new { LogID = (log.LOGID)})">@log.TBL_NAMES.FIRSTNAME @log.TBL_NAMES.LASTNAME</a></td>
+                    <td>@log.TBL_NAMES.TBL_COURSEANDSECTION.COURSE @log.TBL_NAMES.TBL_COURSEANDSECTION.YEAR - @log.TBL_NAMES.TBL_COURSEANDSECTION.SECTION</td>
+                    <td>@log.TBL_COMPUTER.COMPUTERNUMBER</td>
+                    <td>@log.STARTTIME</td>
+                    <td>@log.ENDTIME</td>
+                    <td class="hidden">@log.LOGID</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#LogTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "columnDefs": [
+                { "orderable": false, "targets": 0 }
+            ],
+            order: [[4, 'desc']],
+            "pagingType": $(".container-fluid").width() <= 480 ? "simple" : "simple_numbers"
+        });
+
+        $("button").addClass("btn btn-primary");
+    });
+</script>
+
+
+

@@ -163,7 +163,7 @@
     <Compile Include="Controllers\ComputerController.cs" />
     <Compile Include="Controllers\CourseSectionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\LoggingController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -358,8 +358,8 @@
     <Content Include="Views\Computer\ListScreen.cshtml" />
     <Content Include="Views\Computer\EditScreen.cshtml" />
     <Content Include="Views\Users\RegisterFaceRFID.cshtml" />
-    <Content Include="Views\Log\ListScreen.cshtml" />
-    <Content Include="Views\Log\EditScreen.cshtml" />
+    <Content Include="Views\Logging\EditScreen.cshtml" />
+    <Content Include="Views\Logging\ListScreen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
