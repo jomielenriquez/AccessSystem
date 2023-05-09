@@ -1,0 +1,54 @@
+﻿@model AccessSystem.Model.AdminModel
+@{
+    ViewBag.Title = "Course And Section List";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@using (Html.BeginForm("Delete", "CourseSection", FormMethod.Post, new { @name = "CourseSectionForm" }))
+{
+    <legend>Course, Year and Section</legend>
+    <p class="bs-component">
+        <a class="btn btn-primary" href="@Url.Action("EditScreen","CourseSection")"><i class="icon-plus"></i>  Add</a>
+        <button type="submit" class="btn btn-danger"><i class="icon-trash"></i>  Delete</button>
+    </p>
+    <table id="CourseSectionTable" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th style="width: 25px;">
+                    @*<input type="checkbox" id="AreChecked" />*@
+                </th>
+                <th>Couse</th>
+                <th>Year</th>
+                <th>Section</th>
+                <th>Is Active</th>
+                <th class="hidden">ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AccessSystem.Model.TBL_COURSEANDSECTION CAS in Model.CourseSectionList)
+            {
+                <tr>
+                    <td><input type="checkbox" name="AreChecked" value="@CAS.COURSESECTIONID" /></td>
+                    <td><a href="@Url.Action("EditScreen","CourseSection", new { CourseSectionID = (CAS.COURSESECTIONID)})">@CAS.COURSE</a></td>
+                    <td>@CAS.YEAR</td>
+                    <td>@CAS.SECTION</td>
+                    <td>@CAS.ISACTIVE</td>
+                    <td class="hidden">@CAS.COURSESECTIONID</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#CourseSectionTable').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 0 }
+            ],
+            order: [[1, 'asc']],
+            "pagingType": $(".container-fluid").width() <= 480 ? "simple" : "simple_numbers"
+        });
+    });
+</script>
+

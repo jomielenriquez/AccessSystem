@@ -1,0 +1,57 @@
+﻿@model AccessSystem.Model.AdminModel
+@{
+    ViewBag.Title = "Edit Course and Section";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="alert alert-dismissible alert-danger @(String.IsNullOrEmpty(Model.ErrorMessage)?"hidden":"")">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <h4 class="alert-heading">Error!!!</h4>
+    <p class="mb-0">@Model.ErrorMessage</p>
+</div>
+<div class="card" style="">
+    <div class="card-header">@ViewBag.EditScreenHeader</div>
+    <div class="card-body">
+        @using (Html.BeginForm("Update", "CourseSection", FormMethod.Post, new { @name = "CouseSectionForm" }))
+        {
+            <fieldset>
+                @* Add class row if viewing *@
+                @Html.TextBoxFor(model => model.SelectedCourseSection.COURSESECTIONID, new { @class = "hidden", @id = "COURSESECTIONID" })
+                <div class="form-group row margin_bottom_10">
+                    <label for="Name" class="col-sm-2 col-form-label">Course</label>
+                    <div class="col-sm-10">
+                        @* class should be form-control-plaintext when viewing *@
+                        @Html.TextBoxFor(model => model.SelectedCourseSection.COURSE, new { @class = "form-control", @id = "COURSE" })
+                    </div>
+                </div>
+
+                <div class="form-group row margin_bottom_10">
+                    <label for="Name" class="col-sm-2 col-form-label">Year</label>
+                    <div class="col-sm-10">
+                        @* class should be form-control-plaintext when viewing *@
+                        @Html.TextBoxFor(model => model.SelectedCourseSection.YEAR, new { @class = "form-control", @id = "YEAR" })
+                    </div>
+                </div>
+
+                <div class="form-group row margin_bottom_10">
+                    <label for="Name" class="col-sm-2 col-form-label">Section</label>
+                    <div class="col-sm-10">
+                        @* class should be form-control-plaintext when viewing *@
+                        @Html.TextBoxFor(model => model.SelectedCourseSection.SECTION, new { @class = "form-control", @id = "SECTION" })
+                    </div>
+                </div>
+
+                <div class="form-group row margin_bottom_10">
+                    <label for="Name" class="col-sm-2 col-form-label">Is Active</label>
+                    <div class="col-sm-10">
+                        @* class should be form-control-plaintext when viewing *@
+                        @Html.CheckBoxFor(model => model.SelectedCourseSection.ISACTIVE, new { @class = "form-check-input", @id = "SECTION", @type = "checkbox" })
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success" href=""><i class="icon-save"></i>  Save</button>
+                <a class="btn btn-primary" href="@Url.Action("ListScreen","CourseSection")"><i class="icon-chevron-left"></i>  Back</a>
+            </fieldset>
+        }
+
+    </div>
+</div>

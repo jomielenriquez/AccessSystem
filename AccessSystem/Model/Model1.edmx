@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AccessSystemDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TBL_ADMINUSER">
+          <Key>
+            <PropertyRef Name="ADMINUSERID" />
+          </Key>
+          <Property Name="ADMINUSERID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FIRSTNAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MIDDLENAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LASTNAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="USERNAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PASSWORD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CREATEDDATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATEDBY" Type="nvarchar" MaxLength="50" />
+          <Property Name="UPDATEDDATE" Type="datetime" />
+          <Property Name="UPDATEDBY" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TBL_COMPUTER">
+          <Key>
+            <PropertyRef Name="COMPUTERID" />
+          </Key>
+          <Property Name="COMPUTERID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="COMPUTERNUMBER" Type="int" Nullable="false" />
+          <Property Name="SPECIFICATION" Type="nvarchar(max)" />
+          <Property Name="ISACTIVE" Type="bit" Nullable="false" />
+          <Property Name="CREATEDDATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATEDBY" Type="nvarchar" MaxLength="50" />
+          <Property Name="UPDATEDDATE" Type="datetime" />
+          <Property Name="UPDATEDBY" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TBL_COURSEANDSECTION">
+          <Key>
+            <PropertyRef Name="COURSESECTIONID" />
+          </Key>
+          <Property Name="COURSESECTIONID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="COURSE" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SECTION" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ISACTIVE" Type="bit" Nullable="false" />
+          <Property Name="CREATEDDATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATEDBY" Type="nvarchar" MaxLength="50" />
+          <Property Name="UPDATEDDATE" Type="datetime" />
+          <Property Name="UPDATEDBY" Type="nvarchar" MaxLength="50" />
+          <Property Name="YEAR" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_LOG">
+          <Key>
+            <PropertyRef Name="LOGID" />
+          </Key>
+          <Property Name="LOGID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NAMEID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="COMPUTERID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="STARTTIME" Type="datetime" Nullable="false" />
+          <Property Name="ENDTIME" Type="datetime" />
+          <Property Name="CREATEDDATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATEDBY" Type="nvarchar" MaxLength="50" />
+          <Property Name="UPDATEDDATE" Type="datetime" />
+          <Property Name="UPDATEDBY" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TBL_NAMES">
+          <Key>
+            <PropertyRef Name="NAMEID" />
+          </Key>
+          <Property Name="NAMEID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FIRSTNAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MIDDLENAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LASTNAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="COURSESECTIONID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CREATEDDATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATEDBY" Type="nvarchar" MaxLength="50" />
+          <Property Name="UPDATEDDATE" Type="datetime" />
+          <Property Name="UPDATEDBY" Type="nvarchar" MaxLength="50" />
+          <Property Name="RFIDCODE" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_TBL_LOG_COMPUTERID">
+          <End Role="TBL_COMPUTER" Type="Self.TBL_COMPUTER" Multiplicity="1" />
+          <End Role="TBL_LOG" Type="Self.TBL_LOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_COMPUTER">
+              <PropertyRef Name="COMPUTERID" />
+            </Principal>
+            <Dependent Role="TBL_LOG">
+              <PropertyRef Name="COMPUTERID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_LOG_NAMEID">
+          <End Role="TBL_NAMES" Type="Self.TBL_NAMES" Multiplicity="1" />
+          <End Role="TBL_LOG" Type="Self.TBL_LOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_NAMES">
+              <PropertyRef Name="NAMEID" />
+            </Principal>
+            <Dependent Role="TBL_LOG">
+              <PropertyRef Name="NAMEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_NAMES_COURSESECTIONID">
+          <End Role="TBL_COURSEANDSECTION" Type="Self.TBL_COURSEANDSECTION" Multiplicity="1" />
+          <End Role="TBL_NAMES" Type="Self.TBL_NAMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_COURSEANDSECTION">
+              <PropertyRef Name="COURSESECTIONID" />
+            </Principal>
+            <Dependent Role="TBL_NAMES">
+              <PropertyRef Name="COURSESECTIONID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AccessSystemDBModelStoreContainer">
+          <EntitySet Name="TBL_ADMINUSER" EntityType="Self.TBL_ADMINUSER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_COMPUTER" EntityType="Self.TBL_COMPUTER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_COURSEANDSECTION" EntityType="Self.TBL_COURSEANDSECTION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_LOG" EntityType="Self.TBL_LOG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_NAMES" EntityType="Self.TBL_NAMES" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TBL_LOG_COMPUTERID" Association="Self.FK_TBL_LOG_COMPUTERID">
+            <End Role="TBL_COMPUTER" EntitySet="TBL_COMPUTER" />
+            <End Role="TBL_LOG" EntitySet="TBL_LOG" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_LOG_NAMEID" Association="Self.FK_TBL_LOG_NAMEID">
+            <End Role="TBL_NAMES" EntitySet="TBL_NAMES" />
+            <End Role="TBL_LOG" EntitySet="TBL_LOG" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_NAMES_COURSESECTIONID" Association="Self.FK_TBL_NAMES_COURSESECTIONID">
+            <End Role="TBL_COURSEANDSECTION" EntitySet="TBL_COURSEANDSECTION" />
+            <End Role="TBL_NAMES" EntitySet="TBL_NAMES" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AccessSystemDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TBL_ADMINUSER">
+          <Key>
+            <PropertyRef Name="ADMINUSERID" />
+          </Key>
+          <Property Name="ADMINUSERID" Type="Guid" Nullable="false" />
+          <Property Name="FIRSTNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MIDDLENAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LASTNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="USERNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CREATEDDATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPDATEDDATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="AccessSystemDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TBL_ADMINUSER" EntityType="Self.TBL_ADMINUSER" />
+          <EntitySet Name="TBL_COURSEANDSECTION" EntityType="AccessSystemDBModel.TBL_COURSEANDSECTION" />
+          <EntitySet Name="TBL_NAMES" EntityType="AccessSystemDBModel.TBL_NAMES" />
+          <AssociationSet Name="FK_TBL_NAMES_COURSESECTIONID" Association="AccessSystemDBModel.FK_TBL_NAMES_COURSESECTIONID">
+            <End Role="TBL_COURSEANDSECTION" EntitySet="TBL_COURSEANDSECTION" />
+            <End Role="TBL_NAMES" EntitySet="TBL_NAMES" />
+          </AssociationSet>
+          <EntitySet Name="TBL_COMPUTER" EntityType="AccessSystemDBModel.TBL_COMPUTER" />
+          <EntitySet Name="TBL_LOG" EntityType="AccessSystemDBModel.TBL_LOG" />
+          <AssociationSet Name="FK_TBL_LOG_COMPUTERID" Association="AccessSystemDBModel.FK_TBL_LOG_COMPUTERID">
+            <End Role="TBL_COMPUTER" EntitySet="TBL_COMPUTER" />
+            <End Role="TBL_LOG" EntitySet="TBL_LOG" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_LOG_NAMEID" Association="AccessSystemDBModel.FK_TBL_LOG_NAMEID">
+            <End Role="TBL_NAMES" EntitySet="TBL_NAMES" />
+            <End Role="TBL_LOG" EntitySet="TBL_LOG" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="TBL_COURSEANDSECTION">
+          <Key>
+            <PropertyRef Name="COURSESECTIONID" />
+          </Key>
+          <Property Name="COURSESECTIONID" Type="Guid" Nullable="false" />
+          <Property Name="COURSE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SECTION" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ISACTIVE" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="TBL_NAMES" Relationship="AccessSystemDBModel.FK_TBL_NAMES_COURSESECTIONID" FromRole="TBL_COURSEANDSECTION" ToRole="TBL_NAMES" />
+          <Property Name="CREATEDDATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPDATEDDATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YEAR" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_NAMES">
+          <Key>
+            <PropertyRef Name="NAMEID" />
+          </Key>
+          <Property Name="NAMEID" Type="Guid" Nullable="false" />
+          <Property Name="FIRSTNAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MIDDLENAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LASTNAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="COURSESECTIONID" Type="Guid" Nullable="false" />
+          <Property Name="CREATEDDATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPDATEDDATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TBL_COURSEANDSECTION" Relationship="AccessSystemDBModel.FK_TBL_NAMES_COURSESECTIONID" FromRole="TBL_NAMES" ToRole="TBL_COURSEANDSECTION" />
+          <Property Name="RFIDCODE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TBL_LOG" Relationship="AccessSystemDBModel.FK_TBL_LOG_NAMEID" FromRole="TBL_NAMES" ToRole="TBL_LOG" />
+        </EntityType>
+        <Association Name="FK_TBL_NAMES_COURSESECTIONID">
+          <End Type="AccessSystemDBModel.TBL_COURSEANDSECTION" Role="TBL_COURSEANDSECTION" Multiplicity="1" />
+          <End Type="AccessSystemDBModel.TBL_NAMES" Role="TBL_NAMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_COURSEANDSECTION">
+              <PropertyRef Name="COURSESECTIONID" />
+            </Principal>
+            <Dependent Role="TBL_NAMES">
+              <PropertyRef Name="COURSESECTIONID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TBL_COMPUTER">
+          <Key>
+            <PropertyRef Name="COMPUTERID" />
+          </Key>
+          <Property Name="COMPUTERID" Type="Guid" Nullable="false" />
+          <Property Name="COMPUTERNUMBER" Type="Int32" Nullable="false" />
+          <Property Name="SPECIFICATION" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ISACTIVE" Type="Boolean" Nullable="false" />
+          <Property Name="CREATEDDATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPDATEDDATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TBL_LOG" Relationship="AccessSystemDBModel.FK_TBL_LOG_COMPUTERID" FromRole="TBL_COMPUTER" ToRole="TBL_LOG" />
+        </EntityType>
+        <EntityType Name="TBL_LOG">
+          <Key>
+            <PropertyRef Name="LOGID" />
+          </Key>
+          <Property Name="LOGID" Type="Guid" Nullable="false" />
+          <Property Name="NAMEID" Type="Guid" Nullable="false" />
+          <Property Name="COMPUTERID" Type="Guid" Nullable="false" />
+          <Property Name="STARTTIME" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ENDTIME" Type="DateTime" Precision="3" />
+          <Property Name="CREATEDDATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPDATEDDATE" Type="DateTime" Precision="3" />
+          <Property Name="UPDATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TBL_COMPUTER" Relationship="AccessSystemDBModel.FK_TBL_LOG_COMPUTERID" FromRole="TBL_LOG" ToRole="TBL_COMPUTER" />
+          <NavigationProperty Name="TBL_NAMES" Relationship="AccessSystemDBModel.FK_TBL_LOG_NAMEID" FromRole="TBL_LOG" ToRole="TBL_NAMES" />
+        </EntityType>
+        <Association Name="FK_TBL_LOG_COMPUTERID">
+          <End Type="AccessSystemDBModel.TBL_COMPUTER" Role="TBL_COMPUTER" Multiplicity="1" />
+          <End Type="AccessSystemDBModel.TBL_LOG" Role="TBL_LOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_COMPUTER">
+              <PropertyRef Name="COMPUTERID" />
+            </Principal>
+            <Dependent Role="TBL_LOG">
+              <PropertyRef Name="COMPUTERID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_LOG_NAMEID">
+          <End Type="AccessSystemDBModel.TBL_NAMES" Role="TBL_NAMES" Multiplicity="1" />
+          <End Type="AccessSystemDBModel.TBL_LOG" Role="TBL_LOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_NAMES">
+              <PropertyRef Name="NAMEID" />
+            </Principal>
+            <Dependent Role="TBL_LOG">
+              <PropertyRef Name="NAMEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AccessSystemDBModelStoreContainer" CdmEntityContainer="AccessSystemDBEntities">
+          <EntitySetMapping Name="TBL_ADMINUSER">
+            <EntityTypeMapping TypeName="AccessSystemDBModel.TBL_ADMINUSER">
+              <MappingFragment StoreEntitySet="TBL_ADMINUSER">
+                <ScalarProperty Name="ADMINUSERID" ColumnName="ADMINUSERID" />
+                <ScalarProperty Name="FIRSTNAME" ColumnName="FIRSTNAME" />
+                <ScalarProperty Name="MIDDLENAME" ColumnName="MIDDLENAME" />
+                <ScalarProperty Name="LASTNAME" ColumnName="LASTNAME" />
+                <ScalarProperty Name="USERNAME" ColumnName="USERNAME" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="CREATEDDATE" ColumnName="CREATEDDATE" />
+                <ScalarProperty Name="CREATEDBY" ColumnName="CREATEDBY" />
+                <ScalarProperty Name="UPDATEDDATE" ColumnName="UPDATEDDATE" />
+                <ScalarProperty Name="UPDATEDBY" ColumnName="UPDATEDBY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_COURSEANDSECTION">
+            <EntityTypeMapping TypeName="AccessSystemDBModel.TBL_COURSEANDSECTION">
+              <MappingFragment StoreEntitySet="TBL_COURSEANDSECTION">
+                <ScalarProperty Name="YEAR" ColumnName="YEAR" />
+                <ScalarProperty Name="UPDATEDBY" ColumnName="UPDATEDBY" />
+                <ScalarProperty Name="UPDATEDDATE" ColumnName="UPDATEDDATE" />
+                <ScalarProperty Name="CREATEDBY" ColumnName="CREATEDBY" />
+                <ScalarProperty Name="CREATEDDATE" ColumnName="CREATEDDATE" />
+                <ScalarProperty Name="ISACTIVE" ColumnName="ISACTIVE" />
+                <ScalarProperty Name="SECTION" ColumnName="SECTION" />
+                <ScalarProperty Name="COURSE" ColumnName="COURSE" />
+                <ScalarProperty Name="COURSESECTIONID" ColumnName="COURSESECTIONID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_NAMES">
+            <EntityTypeMapping TypeName="AccessSystemDBModel.TBL_NAMES">
+              <MappingFragment StoreEntitySet="TBL_NAMES">
+                <ScalarProperty Name="RFIDCODE" ColumnName="RFIDCODE" />
+                <ScalarProperty Name="UPDATEDBY" ColumnName="UPDATEDBY" />
+                <ScalarProperty Name="UPDATEDDATE" ColumnName="UPDATEDDATE" />
+                <ScalarProperty Name="CREATEDBY" ColumnName="CREATEDBY" />
+                <ScalarProperty Name="CREATEDDATE" ColumnName="CREATEDDATE" />
+                <ScalarProperty Name="COURSESECTIONID" ColumnName="COURSESECTIONID" />
+                <ScalarProperty Name="LASTNAME" ColumnName="LASTNAME" />
+                <ScalarProperty Name="MIDDLENAME" ColumnName="MIDDLENAME" />
+                <ScalarProperty Name="FIRSTNAME" ColumnName="FIRSTNAME" />
+                <ScalarProperty Name="NAMEID" ColumnName="NAMEID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_COMPUTER">
+            <EntityTypeMapping TypeName="AccessSystemDBModel.TBL_COMPUTER">
+              <MappingFragment StoreEntitySet="TBL_COMPUTER">
+                <ScalarProperty Name="UPDATEDBY" ColumnName="UPDATEDBY" />
+                <ScalarProperty Name="UPDATEDDATE" ColumnName="UPDATEDDATE" />
+                <ScalarProperty Name="CREATEDBY" ColumnName="CREATEDBY" />
+                <ScalarProperty Name="CREATEDDATE" ColumnName="CREATEDDATE" />
+                <ScalarProperty Name="ISACTIVE" ColumnName="ISACTIVE" />
+                <ScalarProperty Name="SPECIFICATION" ColumnName="SPECIFICATION" />
+                <ScalarProperty Name="COMPUTERNUMBER" ColumnName="COMPUTERNUMBER" />
+                <ScalarProperty Name="COMPUTERID" ColumnName="COMPUTERID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_LOG">
+            <EntityTypeMapping TypeName="AccessSystemDBModel.TBL_LOG">
+              <MappingFragment StoreEntitySet="TBL_LOG">
+                <ScalarProperty Name="UPDATEDBY" ColumnName="UPDATEDBY" />
+                <ScalarProperty Name="UPDATEDDATE" ColumnName="UPDATEDDATE" />
+                <ScalarProperty Name="CREATEDBY" ColumnName="CREATEDBY" />
+                <ScalarProperty Name="CREATEDDATE" ColumnName="CREATEDDATE" />
+                <ScalarProperty Name="ENDTIME" ColumnName="ENDTIME" />
+                <ScalarProperty Name="STARTTIME" ColumnName="STARTTIME" />
+                <ScalarProperty Name="COMPUTERID" ColumnName="COMPUTERID" />
+                <ScalarProperty Name="NAMEID" ColumnName="NAMEID" />
+                <ScalarProperty Name="LOGID" ColumnName="LOGID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

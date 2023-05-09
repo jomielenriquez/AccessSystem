@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Doorlock System</title>
+    <script src="~/Scripts/popper.js" crossorigin="anonymous"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/bundles/Table_Style")
+    @Scripts.Render("~/bundles/Table")
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+            @*@Html.ActionLink("Access System", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+            <a class="navbar-brand">Smart RFID Doorlock System</a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>@Html.ActionLink("Computers", "ListScreen", "Computer", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Users", "ListScreen", "Users", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Admin Users", "ListScreen", "AdminUser", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Logs", "ListScreen", "Log", new { area = "" }, new { @class = "nav-link" })</li>
+                </ul>
+                <form class="d-flex">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> @ViewBag.FirstName </a>
+                            <div class="dropdown-menu">
+                                @Html.ActionLink("Account Settings", "AccountSettings", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                                <div class="dropdown-divider"></div>
+                                @Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Smart RFID Doorlock System</p>
+        </footer>
+    </div>
+
+    
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

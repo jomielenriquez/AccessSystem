@@ -1,0 +1,51 @@
+﻿@model AccessSystem.Model.AdminModel
+@{
+    ViewBag.Title = "Computer List";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@using (Html.BeginForm("Delete", "Computer", FormMethod.Post, new { @name = "Computer" }))
+{
+    <legend>Computer List</legend>
+    <p class="bs-component">
+        <a class="btn btn-primary" href="@Url.Action("EditScreen","Computer")"><i class="icon-plus"></i>  Add</a>
+        <button type="submit" class="btn btn-danger"><i class="icon-trash"></i>  Delete</button>
+    </p>
+    <table id="ComputerTable" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th style="width: 25px;">
+                    @*<input type="checkbox" id="AreChecked" />*@
+                </th>
+                <th>Computer Number</th>
+                <th>Specification</th>
+                <th>Status</th>
+                <th class="hidden">ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AccessSystem.Model.TBL_COMPUTER computers in Model.ComputerList)
+            {
+                <tr>
+                    <td><input type="checkbox" name="AreChecked" value="@computers.COMPUTERID" /></td>
+                    <td><a href="@Url.Action("EditScreen","Computer", new { computerID = (computers.COMPUTERID)})">@computers.COMPUTERNUMBER</a></td>
+                    <td>@computers.SPECIFICATION</td>
+                    <td>@(computers.ISACTIVE? Html.Raw("<span class=\"badge bg-success\">Active</span>"): Html.Raw("<span class=\"badge bg-danger\">Inactive</span>")) </td>
+                    <td class="hidden">@computers.COMPUTERNUMBER</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#ComputerTable').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 0 }
+            ],
+            order: [[1, 'asc']],
+            "pagingType": $(".container-fluid").width() <= 480 ? "simple" : "simple_numbers"
+        });
+    });
+</script>

@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Users List";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@using (Html.BeginForm("Delete", "Users", FormMethod.Post, new { @name = "UsersForm" }))
+{
+    <legend>Users List</legend>
+    <p class="bs-component">
+        <a class="btn btn-primary" href="@Url.Action("EditScreen","Users")"><i class="icon-plus"></i>  Add</a>
+        <button type="submit" class="btn btn-danger"><i class="icon-trash"></i>  Delete</button>
+        <a class="btn btn-outline-primary" href="@Url.Action("ListScreen","CourseSection")"><i class="icon-list"></i>  Course, Year And Section List</a>
+    </p>
+    <table id="CourseSectionTable" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th style="width: 25px;">
+                    @*<input type="checkbox" id="AreChecked" />*@
+                </th>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>Course, Year and Section</th>
+                <th class="hidden">ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AccessSystem.Model.TBL_NAMES Users in Model.UserList)
+            {
+                <tr>
+                    <td><input type="checkbox" name="AreChecked" value="@Users.NAMEID" /></td>
+                    <td><a href="@Url.Action("EditScreen","Users", new { NameID = (Users.NAMEID)})">@Users.FIRSTNAME</a></td>
+                    <td>@Users.MIDDLENAME</td>
+                    <td>@Users.LASTNAME</td>
+                    <td>@Users.TBL_COURSEANDSECTION.COURSE @Users.TBL_COURSEANDSECTION.YEAR - @Users.TBL_COURSEANDSECTION.SECTION</td>
+                    <td class="hidden">@Users.NAMEID</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#CourseSectionTable').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 0 }
+            ],
+            order: [[1, 'asc']],
+            "pagingType": $(".container-fluid").width() <= 480 ? "simple" : "simple_numbers"
+        });
+    });
+</script>
+

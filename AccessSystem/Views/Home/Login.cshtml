@@ -1,0 +1,51 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+@model AccessSystem.Model.AdminModel
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <title>Login</title>
+</head>
+<body>
+    <div>
+        <div class="row" style="margin-top:5%">
+            <div class="col-lg-4">
+            </div>
+            <div class="col-lg-3">
+                <div class="card border-primary mb-3">
+                    <div class="card-header">Login</div>
+                    <div class="card-body">
+                        @using (Html.BeginForm("LoginCommand", "Home", FormMethod.Post, new { @name = "SettingsForm" }))
+                        {
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="inputUsername" class="form-label mt-4">Usename</label>
+                                    @Html.TextBoxFor(model => model.username, new { @id = "inputUsername", @class = "form-control", @placeholder = "Username", @type = "text", @style = "max-width: 100% !important; width:100% !important" })
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputPassword" class="form-label mt-4">Password</label>
+                                    @Html.TextBoxFor(model => model.password, new { @id = "inputPassword", @class = "form-control", @placeholder = "Password", @type = "password", @style= "max-width: 100% !important; width:100% !important" })
+                                </div>
+                            </fieldset>
+                            <br />
+                            <button type="submit" class="btn btn-primary align-content-center" style="max-width: 100% !important; width:100% !important">Login</button>
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>

@@ -1,0 +1,49 @@
+﻿@model AccessSystem.Model.AdminModel
+@{
+    ViewBag.Title = "ListScreen";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@using (Html.BeginForm("Delete", "AdminUser", FormMethod.Post, new { @name = "AdminUserForm" }))
+{
+    <legend>Admin Users</legend>
+    <p class="bs-component">
+        <a class="btn btn-primary" href="@Url.Action("EditScreen","AdminUser")"><i class="icon-plus"></i>  Add</a>
+        <button type="submit" class="btn btn-danger"><i class="icon-trash"></i>  Delete</button>
+    </p>
+    <table id="AdminUserType" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th style="width: 25px;">
+                    @*<input type="checkbox" id="AreChecked" />*@
+                </th>
+                <th>Name</th>
+                <th>Username</th>
+                <th class="hidden">ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AccessSystem.Model.TBL_ADMINUSER admin in Model.AccountInfoList)
+            {
+                <tr>
+                    <td><input type="checkbox" name="AreChecked" value="@admin.ADMINUSERID" /></td>
+                    <td><a href="@Url.Action("EditScreen","AdminUser", new { AdminUserID = (admin.ADMINUSERID)})">@admin.FIRSTNAME @admin.LASTNAME</a></td>
+                    <td>@admin.USERNAME</td>
+                    <td class="hidden">@admin.ADMINUSERID</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#AdminUserType').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 0 }
+            ],
+            order: [[1, 'asc']],
+            "pagingType": $(".container-fluid").width() <= 480 ? "simple" : "simple_numbers"
+        });
+    });
+</script>
+

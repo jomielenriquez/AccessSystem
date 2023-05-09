@@ -1,0 +1,52 @@
+﻿@model AccessSystem.Model.Registration
+@{
+    ViewBag.Title = "Contact";
+}
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title.</h2>
+    <h3>@ViewBag.Message</h3>
+    @using (Html.BeginForm("Capture", "Home", FormMethod.Post, new { @name = "captureForm" }))
+    {
+        <video id="webcam" autoplay playsinline width="640" height="480"></video>
+        <canvas id="canvas" class="d-none"></canvas>
+        <audio id="snapSound" src="audio/snap.wav" preload="auto"></audio>
+        <button type="button" class="btn btn-primary" onclick="snap()">Capture</button>
+
+        <image id="test"></image>
+        <button type="submit" class="btn btn-success">Submit</button>
+        <script>
+            const webcamElement = document.getElementById('webcam');
+            const canvasElement = document.getElementById('canvas');
+            const snapSoundElement = document.getElementById('snapSound');
+            const webcam = new Webcam(webcamElement, 'user', canvasElement, snapSoundElement);
+            webcam.start()
+                .then(result => {
+                    console.log("webcam started");
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+
+            function snap() {
+                let picture = webcam.snap();
+                $("#test").val(document.getElementById("canvas").toDataURL());
+
+                var file = document.getElementById("canvas").toDataURL();
+
+                var formdata = new FormData();
+                formdata.append("ImageByteText", file);
+
+                $.ajax({
+                    url: "@Url.Action("Capture")",
+                    type: "POST",
+                    data: formdata,
+                    processData: false,
+                    contentType: false
+                });
+
+            }
+        </script>
+
+    }
+
+</main>

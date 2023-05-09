@@ -1,0 +1,395 @@
+﻿@model AccessSystem.Model.AdminModel
+@{
+    ViewBag.Title = "Home Page";
+}
+@{
+    var Users_List = new List<AccessSystem.Model.TBL_NAMES>();
+    foreach (var list in Model.UserList)
+    {
+        Users_List.Add(
+            new AccessSystem.Model.TBL_NAMES
+            {
+                NAMEID = list.NAMEID,
+                FIRSTNAME = list.FIRSTNAME,
+                MIDDLENAME = list.MIDDLENAME,
+                LASTNAME = list.LASTNAME,
+                COURSESECTIONID = list.COURSESECTIONID,
+                RFIDCODE = list.RFIDCODE
+            }
+        );
+    }
+}
+<script>
+    var listOfAllUsers = @(Html.Raw(Json.Encode(Users_List) ));
+    var isInside = "true";
+    var isInvoke = false;
+
+    function RFIDandName_Changed() {
+        if (isInvoke) {
+            return;
+        }
+        isInvoke = true;
+        setTimeout(function () {
+            if ($("#staticRFIDNumber").val() != null) {
+                var RFIDCODE = $("#staticRFIDNumber").val();
+                var info = listOfAllUsers.filter(function (n, i) { return n.RFIDCODE == RFIDCODE });
+                if (info.length != 0 && isInside != "true") {
+                    var formdata = new FormData();
+                    formdata.append("NameID", info[0]["NAMEID"]);
+                    $.ajax({
+                        url: "@Url.Action("LOGDATAOUT")",
+                        type: "POST",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data);
+                            var JSON_data = JSON.parse(data);
+                            if (JSON_data["ISSUCCESS"] == "TRUE") {
+                                //alert("labas na");
+                                doSendDataWithVal("true");
+                            }
+                            $("#staticRFIDNumber").val("");
+                            $("#staticName").val("");
+                            $("#staticUserID").val("");
+                            isInvoke = false;
+                        }
+                    });
+                }
+            }
+            if ($("#staticRFIDNumber").val() != null && $("#staticName").val() != null && $("#staticUserID").val() != null) {
+                var NameID = $("#staticUserID").val();
+                var RFIDCODE = $("#staticRFIDNumber").val();
+                var info = listOfAllUsers.filter(function (n, i) { return n.NAMEID == NameID && n.RFIDCODE == RFIDCODE });
+
+                if (info.length != 0 && isInside == "true") {
+                    var formdata = new FormData();
+                    formdata.append("NameID", NameID);
+                    formdata.append("RFIDCODE", RFIDCODE);
+                    $.ajax({
+                        url: "@Url.Action("LOGDATAIN")",
+                        type: "POST",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data);
+                            var JSON_data = JSON.parse(data);
+                            if (JSON_data["ISSUCCESS"] == "TRUE") {
+                                doSendDataWithVal("true");
+                                alert("Computer Number is " + JSON_data["COMPUTERID"]);
+                            }
+                            $("#staticRFIDNumber").val("");
+                            $("#staticName").val("");
+                            $("#staticUserID").val("");
+                            isInvoke = false;
+                        }
+                    });
+                }
+                isInvoke = false;
+            }
+
+        }, 2000);
+        console.log("Changed");
+    }
+
+</script>
+@Scripts.RenderFormat("<script defer src='{0}'></script>", "~/bundles/faceAPI")
+@Scripts.RenderFormat("<script defer src='{0}'></script>", "~/bundles/script")
+@Styles.Render("~/Content/style")
+
+<main aria-labelledby="title" class="video">
+    @*<h2 id="title">@ViewBag.Title.</h2>*@
+    @*<h3>@ViewBag.Message</h3>*@
+    <div class="row">
+        <div class="video col-lg-7 renderDetect">
+            <video id="video" width="600" height="450" autoplay></video>
+        </div>
+        <div class="col-lg-2">
+            <form>
+                <fieldset>
+                    <legend>Log Info</legend>
+                    <div class="form-group">
+                        <label for="staticName" class="form-label mt-4">User ID: </label>
+                        <input type="text" readonly="" class="form-control-plaintext" id="staticUserID" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="staticName" class="form-label mt-4">Name: </label>
+                        <input type="text" readonly="" class="form-control-plaintext" id="staticName" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="staticRFIDNumber" class="form-label mt-4">RFID Number: </label>
+                        <input type="text" readonly="" class="form-control-plaintext" id="staticRFIDNumber" value="">
+                    </div>
+                    <br />
+                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                        RFID Settings
+                    </a>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Settings</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div>
+                Settings for RFID reader.
+            </div>
+            <div class="dropdown mt-3">
+                @*===============================================*@
+                @*       BIDI Serial Comm from Javascript        *@
+                @*===============================================*@
+                <form>
+                    <fieldset>
+                        <legend>Serial Communication Settings</legend>
+                        <div class="form-group row">
+                            <label for="serialPort" class="form-label mt-4">Serial Port</label>
+                            <div class="col-sm-10">
+                                @*<input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="email@example.com">*@
+                                <select id="serialPort" class="form-select"></select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="serialPortBaudRate" class="form-label mt-4">Baud Rate</label>
+                            <div class="col-sm-10">
+                                <input id="serialPortBaudRate" value="9600" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="serialPortDataBits" class="form-label mt-4">Data Bits</label>
+                            <div class="col-sm-10">
+                                <select id="serialPortDataBits" class="form-select">
+                                    <option value="Eight">8</option>
+                                    <option value="Seven">7</option>
+                                    <option value="Six">6</option>
+                                    <option value="Five">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="serialPortParity" class="form-label mt-4">Parity</label>
+                            <div class="col-sm-10">
+                                <select id="serialPortParity" class="form-select">
+                                    <option value="None">None</option>
+                                    <option value="Odd">Odd</option>
+                                    <option value="Even">Even</option>
+                                    <option value="Mark">Mark</option>
+                                    <option value="Space">Space</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="serialPortStopBits" class="form-label mt-4">Stop Bits</label>
+                            <div class="col-sm-10">
+                                <select id="serialPortStopBits" class="form-select">
+                                    <option value="One">1</option>
+                                    <option value="OnePointFive">1.5</option>
+                                    <option value="Two">2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="serialPortFlowControl" class="form-label mt-4">Flow Control</label>
+                            <div class="col-sm-10">
+                                <select id="serialPortFlowControl" class="form-select">
+                                    <option value="None">None</option>
+                                    <option value="XOnXOff">XOnXOff</option>
+                                    <option value="RequestToSend">RTS (Request to send)</option>
+                                    <option value="RequestToSendXOnXOff">RTS XOnXOff</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                    </fieldset>
+                    @*<button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>*@
+                    <button type="button" onclick="doOpen();" class="btn btn-success">
+                        Open
+                    </button>
+
+                    <button type="button" onclick="doClose();" class="btn btn-warning">
+                        Close
+                    </button>
+                </form>
+                <br />
+                <form>
+                    <fieldset>
+                        <legend>Data</legend>
+                        <div class="form-group row">
+                            <label for="txtDataToSend" class="form-label mt-4">Data to Send</label>
+                            <div class="col-sm-10">
+                                <input id="txtDataToSend" value="type here..." class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="endLineChars" class="form-label mt-4">End Line Characters</label>
+                            <div class="col-sm-10">
+                                <select name="endLineChars" class="form-select" id="endLineChars">
+                                    <option value="">None</option>
+                                    <option value="CR">CR</option>
+                                    <option value="LF">LF</option>
+                                    <option value="CRLF">CRLF</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                    </fieldset>
+                    <button onclick="doSendData();" class="btn btn-primary">Send...</button>
+                </form>
+                <br />
+                <form>
+                    <fieldset>
+                        <legend>OUTPUT</legend>
+                        <div class="form-group row">
+                            <label for="txtDataReceived" class="form-label mt-4">Data received</label>
+                            <div class="col-sm-10">
+                                <textarea id="txtDataReceived" readOnly style="background-color:#302a2a;color:#fff;font-family: 'Courier New', Courier, monospace;" cols="100" rows="10" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <br />
+                    </fieldset>
+                </form>
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
+                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+                <!--IMPORTANT: BE SURE YOU HONOR THIS JS LOAD ORDER-->
+                @*@Scripts.Render("~/bundles/zip-full")
+                    @Scripts.Render("~/bundles/JSPrintManager")*@
+                <script src="~/Scripts/zip-full.min.js"></script>
+                <script src="~/Scripts/JSPrintManager.js"></script>
+
+
+
+
+                <script>
+
+                    var _serialComm = null;
+                    var _dataToSend = '';
+                    var _dataReceived = '';
+                    var _this = this;
+
+                    //JSPrintManager WebSocket settings
+                    JSPM.JSPrintManager.auto_reconnect = true;
+                    JSPM.JSPrintManager.start();
+                    JSPM.JSPrintManager.WS.onStatusChanged = function () {
+                        if (jspmWSStatus()) {
+                            //get serial ports
+                            JSPM.JSPrintManager.getSerialPorts().then(function (portsList) {
+                                var options = '';
+                                for (var i = 0; i < portsList.length; i++) {
+                                    options += '<option>' + portsList[i] + '</option>';
+                                }
+                                $('#serialPort').html(options);
+                            });
+                        }
+                    };
+
+                    //Check JSPM WebSocket status
+                    function jspmWSStatus() {
+                        if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open)
+                            return true;
+                        else if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Closed) {
+                            console.warn('JSPrintManager (JSPM) is not installed or not running! Download JSPM Client App from https://neodynamic.com/downloads/jspm');
+                            return false;
+                        }
+                        else if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Blocked) {
+                            alert('JSPM has blocked this website!');
+                            return false;
+                        }
+                    }
+
+                    //Sending data to port
+                    function doSendData() {
+                        if (!this._serialComm) {
+                            this._dataReceived += "Serial port is not open!\r\n";
+                            this.refreshDisplay();
+                        } else {
+                            this._dataToSend = $('#txtDataToSend').val();
+                            if (this._dataToSend.length > 0) {
+                                this._serialComm.send(this._dataToSend + $('#endLineChars').val().replace('CR', '\r').replace('LF', '\n'));
+                                this._dataReceived += "> " + this._dataToSend + "\r\n";
+                                this.refreshDisplay();
+                            }
+                        }
+                    }
+
+                    function doSendDataWithVal(data) {
+                        if (!this._serialComm) {
+                            this._dataReceived += "Serial port is not open!\r\n";
+                            this.refreshDisplay();
+                        } else {
+                            this._dataToSend = data;
+                            if (this._dataToSend.length > 0) {
+                                this._serialComm.send(this._dataToSend + $('#endLineChars').val().replace('CR', '\r').replace('LF', '\n'));
+                                this._dataReceived += "> " + this._dataToSend + "\r\n";
+                                this.refreshDisplay();
+                            }
+                        }
+                    }
+
+                    //Open port
+                    function doOpen() {
+                        this._serialComm = new JSPM.SerialComm($('#serialPort').val(), parseInt($('#serialPortBaudRate').val()), JSPM.Serial.Parity[$('#serialPortParity').val()], JSPM.Serial.StopBits[$('#serialPortStopBits').val()], JSPM.Serial.DataBits[$('#serialPortDataBits').val()], JSPM.Serial.Handshake[$('#serialPortFlowControl').val()]);
+
+                        this._serialComm.onDataReceived = function (data) {
+                            _this.dataReceived += "< " + data + "\r\n";
+                            _dataReceived += "< " + data + "\r\n";
+                            data = String(data).replaceAll("'", '"').replace("\r\n", "");
+                            console.log("Data Received:" + data);
+                            var dataRec = JSON.parse(String(data));
+                            //console.log(dataRec["RFIDNumber"]);
+                            $("#staticRFIDNumber").val(dataRec["RFIDNumber"]);
+                            isInside = dataRec["isInside"];
+                            RFIDandName_Changed();
+                            _this.refreshDisplay();
+                        };
+
+                        this._serialComm.onError = function (data, is_critical) {
+                            _this.dataReceived += "ERROR: " + data + "\r\n";
+                            console.log("Error: " + data);
+                            _this.refreshDisplay();
+                        };
+
+                        this._serialComm.onClose = function (data) {
+                            _this.dataReceived += "COMM CLOSED!" + "\r\n";
+                            console.log("Closed: " + data);
+                            _this.refreshDisplay();
+                        };
+
+                        this._serialComm.open().then(_ => {
+                            _this.dataReceived += "COMM OPEN!" + "\r\n";
+                            _this.refreshDisplay();
+                        });
+                    }
+
+                    //close port
+                    function doClose() {
+                        if (!this._serialComm && this._serialComm.isOpen !== true) {
+                            this._dataReceived += "Serial port is not open!\r\n";
+                            this.refreshDisplay();
+                        } else
+                            this._serialComm.close();
+                    }
+
+                    window.addEventListener("beforeunload", function (e) {
+                        // Do something
+                        doClose();
+                    }, false);
+
+                    function refreshDisplay() {
+                        $('#txtDataReceived').val(this._dataReceived);
+                    }
+
+                </script>
+            </div>
+        </div>
+    </div>
+
+</main>

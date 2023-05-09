@@ -1,0 +1,49 @@
+﻿@model AccessSystem.Model.AdminModel
+@{
+    ViewBag.Title = "Edit Computer";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="alert alert-dismissible alert-danger @(String.IsNullOrEmpty(Model.ErrorMessage)?"hidden":"")">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <h4 class="alert-heading">Error!!!</h4>
+    <p class="mb-0">@Model.ErrorMessage</p>
+</div>
+<div class="card" style="">
+    <div class="card-header">@ViewBag.EditScreenHeader</div>
+    <div class="card-body">
+        @using (Html.BeginForm("Update", "Computer", FormMethod.Post, new { @name = "ComputerForm" }))
+        {
+            <fieldset>
+                @* Add class row if viewing *@
+                @Html.TextBoxFor(model => model.SelectedComputer.COMPUTERID, new { @class = "hidden", @id = "COMPUTERID" })
+                <div class="form-group row margin_bottom_10">
+                    <label for="Name" class="col-sm-2 col-form-label">Computer Number</label>
+                    <div class="col-sm-10">
+                        @* class should be form-control-plaintext when viewing *@
+                        @Html.TextBoxFor(model => model.SelectedComputer.COMPUTERNUMBER, new { @class = "form-control", @id = "COMPUTERNUMBER" })
+                    </div>
+                </div>
+
+                <div class="form-group row margin_bottom_10">
+                    <label for="Name" class="col-sm-2 col-form-label">Specification</label>
+                    <div class="col-sm-10">
+                        @* class should be form-control-plaintext when viewing *@
+                        @Html.TextAreaFor(model => model.SelectedComputer.SPECIFICATION, new { @class = "form-control", @id = "SPECIFICATION", @row="5" })
+                    </div>
+                </div>
+
+                <div class="form-group row margin_bottom_10">
+                    <label for="Name" class="col-sm-2 col-form-label">Is Active</label>
+                    <div class="col-sm-10">
+                        @* class should be form-control-plaintext when viewing *@
+                        @Html.CheckBoxFor(model => model.SelectedComputer.ISACTIVE, new { @class = "form-check-input", @id = "SECTION", @type = "checkbox" })
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success" href=""><i class="icon-save"></i>  Save</button>
+                <a class="btn btn-primary" href="@Url.Action("ListScreen","Computer")"><i class="icon-chevron-left"></i>  Back</a>
+            </fieldset>
+        }
+
+    </div>
+</div>

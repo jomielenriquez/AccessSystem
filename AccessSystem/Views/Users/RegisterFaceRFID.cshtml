@@ -1,0 +1,143 @@
+﻿@model AccessSystem.Model.AdminModel
+@{
+    ViewBag.Title = "Register Face and RFID";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="alert alert-dismissible alert-info">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <h4 class="alert-heading">Heads up!!</h4>
+    <p class="mb-0" id="Message">Hello Please take 2 picture</p>
+</div>
+<div class="card" style="">
+    <div class="card-header">@ViewBag.EditScreenHeader</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-5">
+                @using (Html.BeginForm("Update", "Users", FormMethod.Post, new { @name = "UsersForm" }))
+                {
+                    <fieldset>
+                        @* Add class row if viewing *@
+                        @Html.TextBoxFor(model => model.SelectedUser.NAMEID, new { @class = "hidden", @id = "NAMEID" })
+                        <div class="form-group row margin_bottom_10">
+                            <label for="Name" class="col-sm-4 col-form-label">First Name</label>
+                            <div class="col-sm-10">
+                                @* class should be form-control-plaintext when viewing *@
+                                @Html.TextBoxFor(model => model.SelectedUser.FIRSTNAME, new { @class = "form-control-plaintext", @id = "FIRSTNAME", @readonly = "" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row margin_bottom_10">
+                            <label for="Name" class="col-sm-4 col-form-label">Middle Name</label>
+                            <div class="col-sm-10">
+                                @* class should be form-control-plaintext when viewing *@
+                                @Html.TextBoxFor(model => model.SelectedUser.MIDDLENAME, new { @class = "form-control-plaintext", @id = "MIDDLENAME", @readonly = "" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row margin_bottom_10">
+                            <label for="Name" class="col-sm-4 col-form-label">Last Name</label>
+                            <div class="col-sm-10">
+                                @* class should be form-control-plaintext when viewing *@
+                                @Html.TextBoxFor(model => model.SelectedUser.LASTNAME, new { @class = "form-control-plaintext", @id = "LASTNAME", @readonly = "" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row margin_bottom_10">
+                            <label for="Name" class="col-sm-4 col-form-label">Course, Year and Section</label>
+                            <div class="col-sm-10">
+                                @{
+                                    var CYS = new List<SelectListItem>();
+                                    foreach (var Course in Model.CourseSectionList)
+                                    {
+                                        if (Course.ISACTIVE)
+                                        {
+                                            CYS.Add(new SelectListItem { Text = Course.COURSE + " " + Course.YEAR + "-" + Course.SECTION, Value = Course.COURSESECTIONID.ToString() });
+                                        }
+                                    }
+                                }
+                                @Html.DropDownListFor(model => model.SelectedUser.COURSESECTIONID, CYS, "Select Course, Year and Section", new { @class = "form-control-plaintext", @id = "COURSESECTIONID", @disabled = "true" })
+                            </div>
+                        </div>
+
+                        <!--<div class="form-group row margin_bottom_10">
+                            <label for="Name" class="col-sm-4 col-form-label">Please Take 2 </label>
+                            <div class="col-sm-10">-->
+                                @* class should be form-control-plaintext when viewing *@
+                                @*@Html.TextBoxFor(model => model.SelectedUser.LASTNAME, new { @class = "form-control-plaintext", @id = "LASTNAME", @readonly = "" })*@
+                            <!--</div>
+                        </div>-->
+
+                    </fieldset>
+                }
+            </div>
+            <div class="col-lg-5">
+                @using (Html.BeginForm("Capture", "Home", FormMethod.Post, new { @name = "captureForm" }))
+                {
+                    <video id="webcam" autoplay playsinline width="640" height="480"></video>
+                    <canvas id="canvas" class="d-none"></canvas>
+                    <audio id="snapSound" src="~/audio/snap.wav" preload="auto"></audio>
+                    <button type="button" class="btn btn-primary" onclick="snap()">Capture</button>
+                    @*<button type="submit" class="btn btn-warning">Back</button>*@
+                    <image id="test"></image>
+
+
+                }
+
+            </div>
+
+            @*<button type="submit" class="btn btn-success" href=""><i class="icon-save"></i>  Save</button>*@
+
+            
+        <script>
+                var captureNumber = 0;
+                const webcamElement = document.getElementById('webcam');
+                const canvasElement = document.getElementById('canvas');
+                const snapSoundElement = document.getElementById('snapSound');
+                const webcam = new Webcam(webcamElement, 'user', canvasElement, snapSoundElement);
+                webcam.start()
+                    .then(result => {
+                        console.log("webcam started");
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+
+                function snap() {
+                    let picture = webcam.snap();
+                    $("#test").val(document.getElementById("canvas").toDataURL());
+
+                    var file = document.getElementById("canvas").toDataURL();
+
+                    var formdata = new FormData();
+                    var folder = '@Html.Raw(Model.SelectedUser.NAMEID)';
+                    formdata.append("ImageByteText", file);
+                    formdata.append("FolderName", folder);
+                    captureNumber++;
+                    formdata.append("captureNumber", captureNumber.toString());
+
+                    $.ajax({
+                        url: "@Url.Action("Capture")",
+                        type: "POST",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            alert(data);
+                            $("#Message").text("Hello Please take " + captureNumber.toString() + " picture");
+                            if (captureNumber >= 2) {
+                                var url = '@Url.Action("ListScreen", "Users")';
+                                window.location.href = url;
+                            }
+                        }
+                    });
+
+                }
+        </script>
+            @*<a class="btn btn-primary" href="@Url.Action("ListScreen","Users")"><i class="icon-chevron-left"></i>  Back</a>*@
+
+        </div>
+
+    </div>
+</div>
+
