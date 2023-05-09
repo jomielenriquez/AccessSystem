@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace AccessSystem.Controllers
 {
-    public class LogController : Controller
+    public class LoggingController : Controller
     {
         static string ErrorMessage = string.Empty;
         static TBL_LOG holdlog = new TBL_LOG();

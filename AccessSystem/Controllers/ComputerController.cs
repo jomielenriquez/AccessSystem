@@ -85,7 +85,7 @@ namespace AccessSystem.Controllers
         public ActionResult Delete(AdminModel adminModel)
         {
             Data data = new Data();
-            string message = data.Delete(new TBL_ADMINUSER(), adminModel.AreChecked, "COMPUTERID");
+            string message = data.Delete(new TBL_COMPUTER(), adminModel.AreChecked, "COMPUTERID");
 
             return RedirectToAction("ListScreen");
         }
