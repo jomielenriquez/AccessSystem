@@ -1,14 +1,34 @@
 /*
 PINOUT:
-RC522 MODULE    Uno/Nano     MEGA
-SDA             D10          D9
-SCK             D13          D52
-MOSI            D11          D51
-MISO            D12          D50
-IRQ             N/A          N/A
-GND             GND          GND
-RST             D9           D8
-3.3V            3.3V         3.3V
+===========RFID1=================
+RFID MODULE 1   MEGA
+SDA             D9
+SCK             D52
+MOSI            D51
+MISO            D50
+IRQ             N/A
+GND             GND
+RST             D8
+3.3V            3.3V
+
+===========RFID1=================
+RFID MODULE 1   MEGA
+SDA             D7
+SCK             D52
+MOSI            D51
+MISO            D50
+IRQ             N/A
+GND             GND
+RST             D6
+3.3V            3.3V
+
+======RELAY MODULE===============
+RELAY MODEL     MEGA
+VCC             5V
+GND             GND
+IN1             2
+IN2             3
+
 */
 /* Include the standard Arduino SPI library */
 #include <SPI.h>
@@ -53,7 +73,7 @@ void loop()
     Serial.print("I received: ");
     Serial.println(incomingString);
     if(incomingString == "true\n" || incomingString == "true"){
-      Serial.println("OPEN LOCK");
+      //Serial.println("OPEN LOCK");
       // Code to open lock
       digitalWrite(RELAY_PIN, LOW);
 
