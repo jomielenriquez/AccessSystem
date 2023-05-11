@@ -70,24 +70,24 @@ video.addEventListener("play", async () => {
         });
         results.forEach((result, i) => {
             if (i == 0) { // Limiting the detection to one face only
-                const box = resizedDetections[i].detection.box;
-                var userID = result._label;
-                var info = listOfAllUsers.filter(function (n, i) { return n.NAMEID == result._label })
-                try {
-                    result._label = info[0]["FIRSTNAME"] + " " + info[0]["LASTNAME"];
-                }
-                catch {
-                    result._label = "UNKNOWN";
-                }
+                    const box = resizedDetections[i].detection.box;
+                    var userID = result._label;
+                    var info = listOfAllUsers.filter(function (n, i) { return n.NAMEID == result._label })
+                    try {
+                        result._label = info[0]["FIRSTNAME"] + " " + info[0]["LASTNAME"];
+                    }
+                    catch {
+                        result._label = "UNKNOWN";
+                    }
 
-                const drawBox = new faceapi.draw.DrawBox(box, {
-                    label: result,
-                });
-                //console.log(result._label);
-                $("#staticName").val(result._label);
-                $("#staticUserID").val(userID);
-                RFIDandName_Changed();
-                drawBox.draw(canvas);
+                    const drawBox = new faceapi.draw.DrawBox(box, {
+                        label: result,
+                    });
+                    //console.log(result._label);
+                    $("#staticName").val(result._label);
+                    $("#staticUserID").val(userID);
+                    RFIDandName_Changed();
+                    drawBox.draw(canvas);
             }
             if (i > 0) {
                 console.log("error");
