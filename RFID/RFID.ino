@@ -11,8 +11,8 @@ GND             GND
 RST             D8
 3.3V            3.3V
 
-===========RFID1=================
-RFID MODULE 1   MEGA
+===========RFID2=================
+RFID MODULE 2   MEGA
 SDA             D7
 SCK             D52
 MOSI            D51
