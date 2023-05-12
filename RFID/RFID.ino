@@ -70,8 +70,8 @@ void loop()
     String incomingString = Serial.readString();
 
     // prints the received data
-    Serial.print("I received: ");
-    Serial.println(incomingString);
+    //Serial.print("I received: ");
+    //Serial.println(incomingString);
     if(incomingString == "true\n" || incomingString == "true"){
       //Serial.println("OPEN LOCK");
       // Code to open lock
@@ -92,7 +92,7 @@ void loop()
     for(int i=0;i<5;i++)
     {
     Serial.print(RC522.serNum[i],DEC);
-    //Serial.print(RC522.serNum[i],HEX); //to print card detail in Hexa Decimal format
+    Serial.print(RC522.serNum[i],HEX); //to print card detail in Hexa Decimal format
     }
     Serial.println("','isInside':'true'}");
 
@@ -107,7 +107,7 @@ void loop()
     for(int i=0;i<5;i++)
     {
     Serial.print(RC522.serNum[i],DEC);
-    //Serial.print(RC522.serNum[i],HEX); //to print card detail in Hexa Decimal format
+    Serial.print(RC522.serNum[i],HEX); //to print card detail in Hexa Decimal format
     }
     Serial.println("','isInside':'false'}");
 

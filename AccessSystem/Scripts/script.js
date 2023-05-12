@@ -35,11 +35,16 @@ function getLabeledFaceDescriptions() {
             const descriptions = [];
             for (let i = 1; i <= 1; i++) {
                 const img = await faceapi.fetchImage(`../Scripts/label/${label["NAMEID"]}/${i}.jpg`);
-                const detections = await faceapi
-                    .detectSingleFace(img)
-                    .withFaceLandmarks()
-                    .withFaceDescriptor();
-                descriptions.push(detections.descriptor);
+                try {
+                    const detections = await faceapi
+                        .detectSingleFace(img)
+                        .withFaceLandmarks()
+                        .withFaceDescriptor();
+                    descriptions.push(detections.descriptor);
+                }
+                catch (e) {
+                    console.log("face not recognized NameID: " + label["NAMEID"]);
+                }
             }
             return new faceapi.LabeledFaceDescriptors(label["NAMEID"], descriptions);
         })

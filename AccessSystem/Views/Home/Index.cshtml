@@ -64,16 +64,6 @@
                         }
                     });
                 }
-                else {
-                    $("#Message div h4").text('Please Try Again')
-                    if ($("#Message").hasClass("hidden")) {
-                        $("#Message").removeClass("hidden");
-                        setTimeout(function () {
-                            //if($("#Message").ha)
-                            $("#Message").addClass("hidden");
-                        }, 5000)
-                    }
-                }
             }
             if ($("#staticRFIDNumber").val() != null && $("#staticName").val() != null && $("#staticUserID").val() != null) {
                 var NameID = $("#staticUserID").val();
@@ -121,16 +111,6 @@
                             isInvoke = false;
                         }
                     });
-                }
-                else {
-                    $("#Message div h4").text('Please Try Again')
-                    if ($("#Message").hasClass("hidden")) {
-                        $("#Message").removeClass("hidden");
-                        setTimeout(function () {
-                            //if($("#Message").ha)
-                            $("#Message").addClass("hidden");
-                        }, 5000)
-                    }
                 }
                 isInvoke = false;
             }
